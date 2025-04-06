@@ -36,5 +36,5 @@ build/
 ### Env ###
 .env/
 
-### Application Properties ###
-application.properties
+###  Resources ###
+.resources/
