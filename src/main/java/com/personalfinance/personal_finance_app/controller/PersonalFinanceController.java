@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+//File to use endpoints such as get,post,delete,put.
+
 @RestController
 public class PersonalFinanceController {
 
