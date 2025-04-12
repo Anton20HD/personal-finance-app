@@ -2,7 +2,6 @@ package com.personalfinance.personal_finance_app.model;
 
 import java.time.LocalDate;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
