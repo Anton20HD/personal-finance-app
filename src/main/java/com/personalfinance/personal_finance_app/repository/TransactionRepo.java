@@ -14,4 +14,7 @@ public interface TransactionRepo extends MongoRepository<Transaction, String> {
 
     public List<Transaction> findByTitle(String title);
 
+    public List<Transaction> findByCategory(String category);
+
+
 }

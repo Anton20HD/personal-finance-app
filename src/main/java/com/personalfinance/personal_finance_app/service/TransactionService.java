@@ -24,5 +24,13 @@ public class TransactionService {
         return transactionRepo.save(transaction);
     }
 
+    public List<Transaction> getTransactionByCategory(String category) {
+        return transactionRepo.findByCategory(category);
+    }
+
+    
+
+
+
 
 }
