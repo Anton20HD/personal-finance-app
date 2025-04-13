@@ -1,6 +1,5 @@
 package com.personalfinance.personal_finance_app.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
