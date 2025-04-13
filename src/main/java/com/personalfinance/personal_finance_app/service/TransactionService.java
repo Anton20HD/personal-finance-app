@@ -1,8 +1,11 @@
 package com.personalfinance.personal_finance_app.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
@@ -53,7 +56,7 @@ public class TransactionService {
 
     }
 
-    // public Transaction calculateWeeklySummary(LocalDate dateInWeek) {
+    public int calculateWeeklySummary(int year, int week) {
 
 //  Syfte:
 // Returnera en sammanställning av alla transaktioner under en viss vecka.
@@ -66,7 +69,21 @@ public class TransactionService {
 
 // Summera.
 
-    // }
+        LocalDateTime startOfWeek = LocalDateTime.of(year,1,1,0,0,0,0)
+        .with(WeekFields.of(Locale.getDefault()).weekOfYear(),week)
+        .with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
+
+        LocalDateTime endOfWeek = startOfWeek.plusDays(6);
+
+        List<Transaction> result = transactionRepo.findAllByDateBetween(startOfWeek, endOfWeek);
+
+        int total = result.stream()
+        .mapToInt(Transaction::getAmount)
+        .sum();
+
+        return total;
+      
+    }
 
     public int calculateMonthlyTransactionSummary(int year, int month) {
 
@@ -96,18 +113,25 @@ public class TransactionService {
           
     }
 
-//     calculateYearlySummary(int year)
-// Syfte:
-// Ge användaren en överblick över hela året.
+        public int calculateYearlyTransactionSummary(int year) {
 
-// Steg:
+            LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0,0,0);
+            LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59,59,  999999999);
 
-// Använd 1 jan – 31 dec som intervall.
+             // handles first and last dates in the month
+         List<Transaction> result = transactionRepo.findAllByDateBetween(startOfYear,endOfYear);
 
-// Hämta alla transaktioner för det året.
+         System.out.println("Hämtade transaktioner:");
+         result.forEach(transaction -> System.out.println(transaction));
+ 
+ 
+          int total = result.stream()
+             .mapToInt(Transaction::getAmount)
+             .sum();
+ 
+             return total;
 
-// Summera hela året.
+        }
 
-// (Valfritt) Gruppera per månad eller kategori.
 
 }

@@ -56,11 +56,20 @@ public class TransactionController {
                 return transactionService.deleteTransaction(id);
     }
 
-    @GetMapping("/summary/{year}/{month}")
+    @GetMapping("/monthly-summary/{year}/{month}")
     public int getTotalSumInMonth(@PathVariable int year,  @PathVariable int month) {
         return transactionService.calculateMonthlyTransactionSummary(year, month);
     }
 
+    @GetMapping("/weekly-summary/{year}/{week}")
+    public int getTotalSumInWeek(@PathVariable int year,  @PathVariable int week) {
+        return transactionService.calculateWeeklySummary(year, week);
+    } 
+    
+    @GetMapping("/yearly-summary/{year}")
+    public int getTotalSumInYear(@PathVariable int year) {
+        return transactionService.calculateYearlyTransactionSummary(year);
+    }
 
     
 
