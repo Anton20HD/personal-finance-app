@@ -1,6 +1,6 @@
 package com.personalfinance.personal_finance_app.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,7 +23,7 @@ public class Transaction {
 
     private Integer amount;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private String category;
 

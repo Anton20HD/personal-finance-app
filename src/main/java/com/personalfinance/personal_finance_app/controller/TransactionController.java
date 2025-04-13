@@ -1,8 +1,8 @@
 package com.personalfinance.personal_finance_app.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +55,13 @@ public class TransactionController {
     public Transaction deleteTransaction(@PathVariable String id) {
                 return transactionService.deleteTransaction(id);
     }
+
+    @GetMapping("/summary/{year}/{month}")
+    public int getTotalSumInMonth(@PathVariable int year,  @PathVariable int month) {
+        return transactionService.calculateMonthlyTransactionSummary(year, month);
+    }
+
+
     
 
 
