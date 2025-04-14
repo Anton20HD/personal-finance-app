@@ -37,4 +37,5 @@ build/
 .env/
 
 ###  Resources ###
-.resources/
+src/main/resources/application.properties
+
