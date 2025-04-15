@@ -58,17 +58,6 @@ public class TransactionService {
 
     public int calculateWeeklySummary(int year, int week) {
 
-//  Syfte:
-// Returnera en sammanställning av alla transaktioner under en viss vecka.
-
-// Steg:
-
-// Använd dateInWeek för att räkna ut måndag och söndag den veckan.
-
-// Hämta alla transaktioner mellan dessa datum.
-
-// Summera.
-
         LocalDateTime startOfWeek = LocalDateTime.of(year,1,1,0,0,0,0)
         .with(WeekFields.of(Locale.getDefault()).weekOfYear(),week)
         .with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
