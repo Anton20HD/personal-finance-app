@@ -15,19 +15,22 @@ import { colors } from "../../constants/colors";
 const _Layout = () => {
   return (
     //Gömmer den specifika sidan som du är inne på
-    <Tabs screenOptions={{
-            tabBarShowLabel: false,
-            tabBarItemStyle: {
-                justifyContent: 'center',
-                alignItems: 'center'
-            },
-            tabBarStyle: {
-                backgroundColor: '#0B1525',
-                height: 60,
-                padding:10,
-            }
-
-    }}>
+    <Tabs
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarItemStyle: {
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        tabBarStyle: {
+          backgroundColor: "#0B1525",
+          borderColor: "#0B1525",
+          borderBottomColor: "#0B1525",
+          height: 60,
+          padding: 10,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -44,6 +47,7 @@ const _Layout = () => {
           ),
         }}
       ></Tabs.Screen>
+
       <Tabs.Screen
         name="Statistics"
         options={{
