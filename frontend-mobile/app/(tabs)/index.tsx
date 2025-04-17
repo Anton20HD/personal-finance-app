@@ -1,12 +1,41 @@
 import { Link } from "expo-router";
-import { ImageBackground, ScrollView, Text, View } from "react-native";
+import { FlatList, ImageBackground, ScrollView, Text, View } from "react-native";
 import { colors } from "../../constants/colors";
 import SearchIcon from "@expo/vector-icons/FontAwesome5";
 import { Button } from "@rneui/themed";
 import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
 import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
+import { useEffect, useState } from "react";
+
+
+interface Transaction {
+  id: string;
+  title: string;
+  amount: number;
+  date: string;
+  category: string;
+  
+}
 
 export default function Index() {
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await fetch('https://personal-finance-app-production-693d.up.railway.app/transactions')
+        const data = await response.json();
+        setTransactions(data)
+      } catch(error) {
+            console.error('Error when fetching data:', error)
+      }
+    }
+
+
+    fetchTransactions();
+  },[]);
+
   return (
     <View className="flex-1">
       <ImageBackground
@@ -62,10 +91,18 @@ export default function Index() {
               </View>
             </View>
           </View>
-          <View className="mt-10">
+          <View className="p-4 mt-10">
           <Text style={{ fontFamily: "Inter", fontSize: 25, fontWeight: "300" }} className="text-primaryText font-ligh">Recent Transactions:</Text>
-
+      <FlatList
+        data={transactions}
+        keyExtractor={(item: Transaction) => item.id}
+        renderItem={({ item }) => (
+          <View className="mb-2">
+            <Text className="text-white">{item.title} - {item.amount} kr</Text>
           </View>
+        )}
+      />
+    </View>
         </ScrollView>
       </ImageBackground>
     </View>
