@@ -12,7 +12,11 @@ export const theme = {
       negative: '#B91010',
       primaryText: '#FFFFFF',
       secondaryText: '#A0AEC0'
-    }
+    },
+    height: {
+      96: 384,
+      52: 208,
+    },
   },
 };
 export const plugins = [];
