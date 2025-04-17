@@ -18,8 +18,6 @@ const _Layout = () => {
     <Tabs screenOptions={{
             tabBarShowLabel: false,
             tabBarItemStyle: {
-                width: '100%',
-                height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center'
             },
