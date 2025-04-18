@@ -51,16 +51,15 @@ export default function Index() {
         className="flex-1"
         imageStyle={{ height: "100%", width: "100%" }}
       >
-        <ScrollView className="flex-1 flex-col px-5 mt-10">
+        
+          <View className="px-5 pt-1 bg-transparent z-10">
           <View className="flex-1 flex-row-reverse justify-between content-center ">
-            <Button
-              className="w-12 ml-auto mt-10 flex-1 p-1 h-8 "
-              radius={"50"}
-              type="solid"
-              color={colors.secondary}
-            >
-              <SearchIcon name="search" size={18} color={colors.primaryText} />
-            </Button>
+          <TouchableOpacity
+          className="w-10 h-10 ml-auto mt-10 items-center justify-center  p-1 rounded-full bg-secondary shadow-md"
+          onPress={() => ""}
+        >
+           <SearchIcon name="search" size={18} color={colors.primaryText} />
+        </TouchableOpacity>
             <Text
               style={{ fontFamily: "Inter", fontSize: 30, fontWeight: "bold" }}
               className="mt-10 mb-5 text-primaryText"
@@ -74,6 +73,12 @@ export default function Index() {
               {"\n"}User
             </Text>
           </View>
+          </View>
+
+          <ScrollView className="flex-1 flex-col px-5">
+
+          <View style={{ height: 20 }} />
+
           <View className="mx-0 my-6 p-5 bg-white rounded-xl shadow-lg border border-gray-100 h-52">
             <View className="flex-row justify-between items-center mb-4">
               <Text
@@ -133,6 +138,7 @@ export default function Index() {
             </Text>
             <FlatList
               data={transactions}
+              scrollEnabled={false}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
                 <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[200px_1fr] content-center justify-center ">
