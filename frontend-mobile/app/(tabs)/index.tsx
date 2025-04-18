@@ -131,16 +131,29 @@ export default function Index() {
               data={transactions}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
-                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[300px_1fr] content-center justify-center ">
-                  <View className="flex flex-col ml-10">  
-                  <Text className="text-primaryText text-lg">
-                    {item.title} 
-                  </Text> 
-                  <Text className="text-disabled  text-base">
-                    {item.category}
-                  </Text>
+                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[200px_1fr] content-center justify-center ">
+                  <View className="flex flex-col ml-10">
+                    <Text
+                      style={{ fontFamily: "Inter" }}
+                      className="text-primaryText text-lg"
+                    >
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={{ fontFamily: "Inter" }}
+                      className="text-disabled  text-base"
+                    >
+                      {item.category}
+                    </Text>
                   </View>
-                  <Text className="text-primaryText text-lg">{item.amount} kr</Text>
+                  <Text
+                    style={{ fontFamily: "Inter" }}
+                    className="text-primaryText text-lg text-right pr-10 content-center justify-center"
+                   
+                   
+                  >
+                    {item.amount} kr
+                  </Text>
                 </View>
               )}
             />
