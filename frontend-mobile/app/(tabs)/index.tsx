@@ -123,7 +123,7 @@ export default function Index() {
           <View className="p-4 mt-10">
             <Text
               style={{ fontFamily: "Inter", fontSize: 25, fontWeight: "300" }}
-              className="text-primaryText font-ligh"
+              className="text-primaryText font-light mb-5"
             >
               Recent Transactions:
             </Text>
@@ -131,10 +131,16 @@ export default function Index() {
               data={transactions}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
-                <View className="mb-2 bg-card">
-                  <Text className="text-white">
-                    {item.title} - {item.amount} kr
+                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[300px_1fr] content-center justify-center ">
+                  <View className="flex flex-col ml-10">  
+                  <Text className="text-primaryText text-lg">
+                    {item.title} 
+                  </Text> 
+                  <Text className="text-disabled  text-base">
+                    {item.category}
                   </Text>
+                  </View>
+                  <Text className="text-primaryText text-lg">{item.amount} kr</Text>
                 </View>
               )}
             />
