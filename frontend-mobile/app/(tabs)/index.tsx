@@ -1,5 +1,11 @@
 import { Link } from "expo-router";
-import { FlatList, ImageBackground, ScrollView, Text, View } from "react-native";
+import {
+  FlatList,
+  ImageBackground,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { colors } from "../../constants/colors";
 import SearchIcon from "@expo/vector-icons/FontAwesome5";
 import { Button } from "@rneui/themed";
@@ -7,34 +13,32 @@ import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
 import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
 import { useEffect, useState } from "react";
 
-
 interface Transaction {
   id: string;
   title: string;
   amount: number;
   date: string;
   category: string;
-  
 }
 
 export default function Index() {
-
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch('https://personal-finance-app-production-693d.up.railway.app/transactions')
+        const response = await fetch(
+          "https://personal-finance-app-production-693d.up.railway.app/transactions"
+        );
         const data = await response.json();
-        setTransactions(data)
-      } catch(error) {
-            console.error('Error when fetching data:', error)
+        setTransactions(data);
+      } catch (error) {
+        console.error("Error when fetching data:", error);
       }
-    }
-
+    };
 
     fetchTransactions();
-  },[]);
+  }, []);
 
   return (
     <View className="flex-1">
@@ -69,12 +73,15 @@ export default function Index() {
           </View>
           <View className="mx-0 my-6 p-5 bg-white rounded-xl shadow-lg border border-gray-100 h-52">
             <View className="flex-row justify-between items-center mb-4">
-              <Text 
+              <Text
                 className="mb-1"
                 style={{ fontFamily: "Inter", fontSize: 22, fontWeight: "500" }}
               >
                 Total Balance:{" "}
-                <Text style={{ fontFamily: "Inter", fontSize: 30 }} className="font-bold ">
+                <Text
+                  style={{ fontFamily: "Inter", fontSize: 30 }}
+                  className="font-bold "
+                >
                   {"\n"}$400.00
                 </Text>
               </Text>
@@ -84,25 +91,54 @@ export default function Index() {
 
             <View className="flex-row justify-between mt-2">
               <View className="items-start">
-                <Text  style={{ fontFamily: "Inter", fontSize: 20, fontWeight: "500" }}>Income:<Text className="font-semibold text-positive">{"\n"}$800.00</Text></Text>
+                <Text
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: 20,
+                    fontWeight: "500",
+                  }}
+                >
+                  Income:
+                  <Text className="font-semibold text-positive">
+                    {"\n"}$800.00
+                  </Text>
+                </Text>
               </View>
               <View className="items-end">
-                <Text  style={{ fontFamily: "Inter", fontSize: 20, fontWeight: "500" }}>Expense:<Text className="font-semibold text-negative">{"\n"}$300.00</Text></Text>
+                <Text
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: 20,
+                    fontWeight: "500",
+                  }}
+                >
+                  Expense:
+                  <Text className="font-semibold text-negative">
+                    {"\n"}$300.00
+                  </Text>
+                </Text>
               </View>
             </View>
           </View>
           <View className="p-4 mt-10">
-          <Text style={{ fontFamily: "Inter", fontSize: 25, fontWeight: "300" }} className="text-primaryText font-ligh">Recent Transactions:</Text>
-      <FlatList
-        data={transactions}
-        keyExtractor={(item: Transaction) => item.id}
-        renderItem={({ item }) => (
-          <View className="mb-2">
-            <Text className="text-white">{item.title} - {item.amount} kr</Text>
+            <Text
+              style={{ fontFamily: "Inter", fontSize: 25, fontWeight: "300" }}
+              className="text-primaryText font-ligh"
+            >
+              Recent Transactions:
+            </Text>
+            <FlatList
+              data={transactions}
+              keyExtractor={(item: Transaction) => item.id}
+              renderItem={({ item }) => (
+                <View className="mb-2 bg-card">
+                  <Text className="text-white">
+                    {item.title} - {item.amount} kr
+                  </Text>
+                </View>
+              )}
+            />
           </View>
-        )}
-      />
-    </View>
         </ScrollView>
       </ImageBackground>
     </View>

@@ -11,7 +11,8 @@ export const theme = {
       positive: '#10B981',
       negative: '#B91010',
       primaryText: '#FFFFFF',
-      secondaryText: '#A0AEC0'
+      secondaryText: '#A0AEC0',
+      card: '#1A2942'
     },
     height: {
       96: 384,
