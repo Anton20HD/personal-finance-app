@@ -15,6 +15,7 @@ import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
 import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
 import { useEffect, useState } from "react";
 import AddIcon from "@expo/vector-icons/AntDesign";
+import AddTransaction from "@/components/AddTransaction";
 
 interface Transaction {
   id: string;
@@ -27,13 +28,12 @@ interface Transaction {
 //GLÖM INTE!! Använd denna url när du är klar sedan: https://personal-finance-app-production-693d.up.railway.app/transactions
 export default function Index() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/transactions"
-        );
+        const response = await fetch("http://localhost:8080/transactions");
         const data = await response.json();
         setTransactions(data);
       } catch (error) {
@@ -52,15 +52,14 @@ export default function Index() {
         className="flex-1"
         imageStyle={{ height: "100%", width: "100%" }}
       >
-        
-          <View className="px-5 pt-1 bg-transparent z-10">
+        <View className="px-5 pt-1 bg-transparent z-10">
           <View className="flex-1 flex-row-reverse justify-between content-center ">
-          <TouchableOpacity
-          className="w-10 h-10 ml-auto mt-10 items-center justify-center  p-1 rounded-full bg-secondary shadow-md"
-          onPress={() => ""}
-        >
-           <SearchIcon name="search" size={18} color={colors.primaryText} />
-        </TouchableOpacity>
+            <TouchableOpacity
+              className="w-10 h-10 ml-auto mt-10 items-center justify-center  p-1 rounded-full bg-secondary shadow-md"
+              onPress={() => ""}
+            >
+              <SearchIcon name="search" size={18} color={colors.primaryText} />
+            </TouchableOpacity>
             <Text
               style={{ fontFamily: "Inter", fontSize: 30, fontWeight: "bold" }}
               className="mt-10 mb-5 text-primaryText"
@@ -74,10 +73,9 @@ export default function Index() {
               {"\n"}User
             </Text>
           </View>
-          </View>
+        </View>
 
-          <ScrollView className="flex-1 flex-col px-5">
-
+        <ScrollView className="flex-1 flex-col px-5">
           <View style={{ height: 20 }} />
 
           <View className="mx-0 my-6 p-5 bg-white rounded-xl shadow-lg border border-gray-100 h-52">
@@ -142,7 +140,7 @@ export default function Index() {
               scrollEnabled={false}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
-                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[200px_1fr] content-center justify-center ">
+                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[200px_1fr] content-center justify-center shadow-md ">
                   <View className="flex flex-col ml-10">
                     <Text
                       style={{ fontFamily: "Inter" }}
@@ -170,11 +168,13 @@ export default function Index() {
         </ScrollView>
         <TouchableOpacity
           className="bg-secondary rounded-full p-3 w-12 h-12 items-center justify-center absolute bottom-10 right-6 shadow-md "
-          onPress={() => ""}
+          onPress={() => setModalVisible(true)}
         >
+
           <AddIcon name="plus" size={18} color={colors.primaryText} />
         </TouchableOpacity>
       </ImageBackground>
+      <AddTransaction modalVisible={modalVisible} setModalVisible={setModalVisible}/>
     </SafeAreaView>
   );
 }
