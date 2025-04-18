@@ -24,6 +24,7 @@ interface Transaction {
   category: string;
 }
 
+//GLÖM INTE!! Använd denna url när du är klar sedan: https://personal-finance-app-production-693d.up.railway.app/transactions
 export default function Index() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -31,7 +32,7 @@ export default function Index() {
     const fetchTransactions = async () => {
       try {
         const response = await fetch(
-          "https://personal-finance-app-production-693d.up.railway.app/transactions"
+          "http://localhost:8080/transactions"
         );
         const data = await response.json();
         setTransactions(data);
