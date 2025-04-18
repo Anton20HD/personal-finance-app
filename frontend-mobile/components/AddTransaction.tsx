@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Modal, Pressable, Text, View } from "react-native";
+import TransactionForm from "./TransactionForm";
 
 const AddTransaction = ({
   modalVisible,
@@ -18,17 +19,25 @@ const AddTransaction = ({
         setModalVisible(!modalVisible);
       }}
     >
-      <View className="flex-1 justify-center items-center content-center bg-black/30">
-        <View className="h-20 w-96 bg-white rounded-md items-center shadow-md p-4 ">
-          <Text className="text-center mb-4 text-lg font-bold">Add Transaction</Text>
-
-          <Pressable
-            className="rounded-lg p-3 bg-secondary mt-auto"
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-           
-            <Text className="text-primaryText">Close</Text>
-          </Pressable>
+      <View className="flex-1  bg-black/30 ">
+        <View className="flex-1 bg-white mt-10 rounded-lg shadow-lg ">
+          <View className="flex-col justify-between items-center p-4 border-b border-gray-200 ">
+            <Pressable
+              className="rounded-lg p-2 bg-gray-100"
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text className="text-black">X</Text>
+            </Pressable>
+            <View className="flex-1 p-5">
+              <TransactionForm />
+            </View>
+            <Pressable
+              className="rounded-lg p-4 bg-secondary items-center"
+              onPress={() => ""}
+            >
+              <Text className="text-black">Add</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
