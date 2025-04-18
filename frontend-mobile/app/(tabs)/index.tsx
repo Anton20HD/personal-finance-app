@@ -4,14 +4,17 @@ import {
   ImageBackground,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../constants/colors";
 import SearchIcon from "@expo/vector-icons/FontAwesome5";
 import { Button } from "@rneui/themed";
 import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
 import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
 import { useEffect, useState } from "react";
+import AddIcon from "@expo/vector-icons/AntDesign";
 
 interface Transaction {
   id: string;
@@ -41,7 +44,7 @@ export default function Index() {
   }, []);
 
   return (
-    <View className="flex-1">
+    <SafeAreaView className="flex-1">
       <ImageBackground
         source={require("@/assets/images/minimal-finance-wallpaper.png")}
         resizeMode="cover"
@@ -49,7 +52,7 @@ export default function Index() {
         imageStyle={{ height: "100%", width: "100%" }}
       >
         <ScrollView className="flex-1 flex-col px-5 mt-10">
-          <View className="flex-1 flex-row-reverse justify-between content-center">
+          <View className="flex-1 flex-row-reverse justify-between content-center ">
             <Button
               className="w-12 ml-auto mt-10 flex-1 p-1 h-8 "
               radius={"50"}
@@ -120,6 +123,7 @@ export default function Index() {
               </View>
             </View>
           </View>
+
           <View className="p-4 mt-10">
             <Text
               style={{ fontFamily: "Inter", fontSize: 25, fontWeight: "300" }}
@@ -149,8 +153,6 @@ export default function Index() {
                   <Text
                     style={{ fontFamily: "Inter" }}
                     className="text-primaryText text-lg text-right pr-10 content-center justify-center"
-                   
-                   
                   >
                     {item.amount} kr
                   </Text>
@@ -159,7 +161,13 @@ export default function Index() {
             />
           </View>
         </ScrollView>
+        <TouchableOpacity
+          className="bg-secondary rounded-full p-3 w-12 h-12 items-center justify-center absolute bottom-10 right-6 shadow-md "
+          onPress={() => ""}
+        >
+          <AddIcon name="plus" size={18} color={colors.primaryText} />
+        </TouchableOpacity>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 }
