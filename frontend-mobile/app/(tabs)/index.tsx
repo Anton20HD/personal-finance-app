@@ -84,7 +84,7 @@ export default function Index() {
                 className="mb-1"
                 style={{ fontFamily: "Inter", fontSize: 22, fontWeight: "500" }}
               >
-                Total Balance:{" "}
+                Total Balance:
                 <Text
                   style={{ fontFamily: "Inter", fontSize: 30 }}
                   className="font-bold "
