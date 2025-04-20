@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../constants/colors";
@@ -16,6 +17,7 @@ import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
 import { useEffect, useState } from "react";
 import AddIcon from "@expo/vector-icons/AntDesign";
 import AddTransaction from "@/components/AddTransaction";
+import { categories } from "@/constants/categoryData";
 
 interface Transaction {
   id: string;
@@ -43,6 +45,11 @@ export default function Index() {
 
     fetchTransactions();
   }, []);
+
+  const getCategoryIcon = (categoryKey: string) => {
+    const category = categories.find((cat) => cat.key === categoryKey);
+    return category ? category.icon : null; // Return icon if it exists
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -140,8 +147,14 @@ export default function Index() {
               scrollEnabled={false}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
-                <View className="mb-2 bg-card h-14  rounded-xl grid grid-cols-[200px_1fr] content-center justify-center shadow-md ">
-                  <View className="flex flex-col ml-10">
+                <View className="mb-2 bg-card h-14 rounded-xl flex-row items-center shadow-md ">
+                  <View className="ml-2 flex-shrink-0">
+                      <Image
+                        source={getCategoryIcon(item.category)}
+                        style={{ width: 40, height: 40 }}
+                      />
+                    </View>
+                  <View className="flex-1 ml-3 ">
                     <Text
                       style={{ fontFamily: "Inter" }}
                       className="text-primaryText text-lg"
@@ -170,11 +183,13 @@ export default function Index() {
           className="bg-secondary rounded-full p-3 w-12 h-12 items-center justify-center absolute bottom-10 right-6 shadow-md "
           onPress={() => setModalVisible(true)}
         >
-
           <AddIcon name="plus" size={18} color={colors.primaryText} />
         </TouchableOpacity>
       </ImageBackground>
-      <AddTransaction modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+      <AddTransaction
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </SafeAreaView>
   );
 }
