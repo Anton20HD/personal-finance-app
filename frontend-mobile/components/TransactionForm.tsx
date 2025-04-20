@@ -47,7 +47,7 @@ const TransactionForm = ({
         </Text>
         <TextInput
           style={{ fontFamily: "Inter", fontSize: 15, fontWeight: "500" }}
-          className=" h-10 m-3 border p-3 bg-white"
+          className=" h-10 m-0 border p-3 bg-white"
           placeholder="Title"
           value={title}
           onChangeText={setTitle}
@@ -63,7 +63,7 @@ const TransactionForm = ({
         </Text>
         <TextInput
           style={{ fontFamily: "Inter", fontSize: 15, fontWeight: "500" }}
-          className="h-10 m-3 border p-3 bg-white"
+          className="h-10 m-0 border p-3 bg-white"
           placeholder="Amount"
           value={amount}
           onChangeText={setAmount}
@@ -78,20 +78,14 @@ const TransactionForm = ({
             type="date"
             value={date}
             onChange={(e: any) => setDate(e.target.value)}
-            style={{
-              height: 40,
-              margin: 12,
-              borderWidth: 1,
-              padding: 10,
-              fontFamily: "Inter",
-              fontSize: 15,
-            }}
+            className="h-10 m-0 border p-3"
+            
           />
         ) : (
           <>
             <Pressable
               onPress={() => setShowDatePicker(true)}
-              className="h-10 m-3 border p-3 bg-white justify-center"
+              className="h-10 m-0 border p-3 bg-white "
             >
               <Text>{date ? date : "Select Date"}</Text>
             </Pressable>
@@ -118,7 +112,7 @@ const TransactionForm = ({
         <Picker
           style={{ fontFamily: "Inter", fontSize: 15, fontWeight: "500" }}
           selectedValue={category}
-          className="border p-1"
+          className="h-10 m-0 border p-3"
           onValueChange={(itemValue) => setCategory(itemValue)}
         >
           {categories.map((cat) => (
