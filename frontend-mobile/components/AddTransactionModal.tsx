@@ -5,7 +5,7 @@ import CloseIcon from "@expo/vector-icons/AntDesign";
 
 
 
-const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean;setModalVisible: (visible: boolean) => void;}) => {
+const AddTransactionModal = ({addTransactionModalVisible, setAddTransactionModalVisible,}: { addTransactionModalVisible: boolean;setAddTransactionModalVisible: (visible: boolean) => void;}) => {
   
       const [title, setTitle] = useState("");
       const [amount, setAmount] = useState("");
@@ -38,7 +38,7 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
 
         if(response.ok) {
             console.log("Transaction added!");
-            setModalVisible(false);
+            setAddTransactionModalVisible(false);
         } else {
           const errorText = await response.text();
           console.error("Error from backend:", errorText)
@@ -56,10 +56,10 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
     <Modal
       animationType="slide"
       transparent={true}
-      visible={modalVisible}
+      visible={addTransactionModalVisible}
       onRequestClose={() => {
         Alert.alert("Modal has been closed.");
-        setModalVisible(!modalVisible);
+        setAddTransactionModalVisible(!addTransactionModalVisible);
       }}
     >
       <View className="flex-1  bg-black/30 ">
@@ -67,7 +67,7 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
           <View className="flex-col justify-between content-center p-4 border-b border-gray-200 ">
             <Pressable
               className="rounded-lg p-2 bg-black ml-auto"
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => setAddTransactionModalVisible(!addTransactionModalVisible)}
             >
               <CloseIcon name="close" size={24} color="white" />
             </Pressable>
@@ -101,4 +101,4 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
   );
 };
 
-export default AddTransaction;
+export default AddTransactionModal;

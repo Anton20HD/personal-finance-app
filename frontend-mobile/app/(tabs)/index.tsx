@@ -16,8 +16,9 @@ import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
 import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
 import { useEffect, useState } from "react";
 import AddIcon from "@expo/vector-icons/AntDesign";
-import AddTransaction from "@/components/AddTransaction";
+import AddTransactionModal from "@/components/AddTransactionModal";
 import { categories } from "@/constants/categoryData";
+import SearchTransactionModal from "@/components/SearchTransactionModal";
 
 interface Transaction {
   id: string;
@@ -30,7 +31,8 @@ interface Transaction {
 //GLÖM INTE!! Använd denna url när du är klar sedan: https://personal-finance-app-production-693d.up.railway.app/transactions
 export default function Index() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [addTransactionModalVisible, setAddTransactionModalVisible] = useState(false);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -63,7 +65,7 @@ export default function Index() {
           <View className="flex-1 flex-row-reverse justify-between content-center ">
             <TouchableOpacity
               className="w-10 h-10 ml-auto mt-10 items-center justify-center  p-1 rounded-full bg-secondary shadow-md"
-              onPress={() => ""}
+              onPress={() => setSearchModalVisible(true)}
             >
               <SearchIcon name="search" size={18} color={colors.primaryText} />
             </TouchableOpacity>
@@ -154,7 +156,7 @@ export default function Index() {
                         style={{ width: 40, height: 40 }}
                       />
                     </View>
-                  <View className="flex-1 ml-3 ">
+                  <View className="flex-1 ml-3 gap-0 ">
                     <Text
                       style={{ fontFamily: "Inter" }}
                       className="text-primaryText text-lg"
@@ -181,14 +183,18 @@ export default function Index() {
         </ScrollView>
         <TouchableOpacity
           className="bg-secondary rounded-full p-3 w-12 h-12 items-center justify-center absolute bottom-10 right-6 shadow-md "
-          onPress={() => setModalVisible(true)}
+          onPress={() => setAddTransactionModalVisible(true)}
         >
           <AddIcon name="plus" size={18} color={colors.primaryText} />
         </TouchableOpacity>
       </ImageBackground>
-      <AddTransaction
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+      <AddTransactionModal
+        addTransactionModalVisible={addTransactionModalVisible}
+        setAddTransactionModalVisible={setAddTransactionModalVisible}
+      />
+      <SearchTransactionModal
+        searchModalVisible={searchModalVisible}
+        setSearchModalVisible={setSearchModalVisible}
       />
     </SafeAreaView>
   );
