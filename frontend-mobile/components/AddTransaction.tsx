@@ -13,12 +13,21 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
       const [category, setCategory] = useState("");
   
       const handleSubmit = async () => {
+
+        // if(!title || !amount || !date || !category) {
+        //   Alert.alert("All fields must be completed");
+        //   return;
+        // }
+
+        const localDateTime = `${date}T00:00:00`;
+
         const formData = {
             title,
-            amount,
-            date,
+            amount: parseInt(amount),
+            date: localDateTime,
             category,
         };
+
 
         try {
             const response = await fetch("http://localhost:8080/transactions", {
@@ -31,11 +40,13 @@ const AddTransaction = ({modalVisible,setModalVisible,}: { modalVisible: boolean
             console.log("Transaction added!");
             setModalVisible(false);
         } else {
+          const errorText = await response.text();
+          console.error("Error from backend:", errorText)
             Alert.alert("Error", "Failed to add transaction")
         }
       } catch(error) {
-        console.error("Submit error:", error)
-        throw new Error("Transaction creation not completed")
+        console.error("Submit error:", error);
+        Alert.alert("Error", "Network error");
       }
 
     }
