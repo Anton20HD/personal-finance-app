@@ -19,6 +19,8 @@ import AddIcon from "@expo/vector-icons/AntDesign";
 import AddTransactionModal from "@/components/AddTransactionModal";
 import { categories } from "@/constants/categoryData";
 import SearchTransactionModal from "@/components/SearchTransactionModal";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import Trashcan from '@expo/vector-icons/FontAwesome';
 
 interface Transaction {
   id: string;
@@ -31,7 +33,8 @@ interface Transaction {
 //GLÖM INTE!! Använd denna url när du är klar sedan: https://personal-finance-app-production-693d.up.railway.app/transactions
 export default function Index() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [addTransactionModalVisible, setAddTransactionModalVisible] = useState(false);
+  const [addTransactionModalVisible, setAddTransactionModalVisible] =
+    useState(false);
   const [searchModalVisible, setSearchModalVisible] = useState(false);
 
   useEffect(() => {
@@ -47,6 +50,28 @@ export default function Index() {
 
     fetchTransactions();
   }, []);
+
+  const deleteTransaction = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/transactions/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+      } else {
+        console.error("Failed to delete from server");
+      }
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
+  };
+
+  const renderRightActions = (id: string) => (
+    <View className=" bg-negative rounded-md m-2 h-12 justify-center flex-1 pr-5 items-end">
+      <Trashcan name="trash-o" size={24} color="white" />
+    </View>
+  );
 
   const getCategoryIcon = (categoryKey: string) => {
     const category = categories.find((cat) => cat.key === categoryKey);
@@ -149,34 +174,41 @@ export default function Index() {
               scrollEnabled={false}
               keyExtractor={(item: Transaction) => item.id}
               renderItem={({ item }) => (
-                <View className="mb-2 bg-card h-14 rounded-xl flex-row items-center shadow-md ">
-                  <View className="ml-2 flex-shrink-0">
+                <Swipeable
+                  renderRightActions={() => renderRightActions(item.id)}
+                  onSwipeableOpen={() => deleteTransaction(item.id)}
+                  overshootRight={false}
+                  containerStyle={{ backgroundColor: "transparent" }}
+                >
+                  <View className="mb-2 bg-card h-14  rounded-xl flex-row items-center shadow-md">
+                    <View className="ml-2 flex-shrink-0">
                       <Image
                         source={getCategoryIcon(item.category)}
                         style={{ width: 40, height: 40 }}
                       />
                     </View>
-                  <View className="flex-1 ml-3 gap-0 ">
+                    <View className="flex-1 ml-3 gap-0 ">
+                      <Text
+                        style={{ fontFamily: "Inter" }}
+                        className="text-primaryText text-lg"
+                      >
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "Inter" }}
+                        className="text-disabled  text-base"
+                      >
+                        {item.category}
+                      </Text>
+                    </View>
                     <Text
                       style={{ fontFamily: "Inter" }}
-                      className="text-primaryText text-lg"
+                      className="text-primaryText text-lg text-right pr-10 content-center justify-center"
                     >
-                      {item.title}
-                    </Text>
-                    <Text
-                      style={{ fontFamily: "Inter" }}
-                      className="text-disabled  text-base"
-                    >
-                      {item.category}
+                      {item.amount} kr
                     </Text>
                   </View>
-                  <Text
-                    style={{ fontFamily: "Inter" }}
-                    className="text-primaryText text-lg text-right pr-10 content-center justify-center"
-                  >
-                    {item.amount} kr
-                  </Text>
-                </View>
+                </Swipeable>
               )}
             />
           </View>
