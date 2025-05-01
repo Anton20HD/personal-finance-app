@@ -1,26 +1,22 @@
-import { Link } from "expo-router";
+import AddTransactionModal from "@/components/AddTransactionModal";
+import SearchTransactionModal from "@/components/SearchTransactionModal";
+import { categories } from "@/constants/categoryData";
+import AddIcon from "@expo/vector-icons/AntDesign";
+import Trashcan from '@expo/vector-icons/FontAwesome';
+import SearchIcon from "@expo/vector-icons/FontAwesome5";
+import { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   ImageBackground,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
-  Image,
 } from "react-native";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../constants/colors";
-import SearchIcon from "@expo/vector-icons/FontAwesome5";
-import { Button } from "@rneui/themed";
-import GreetingTextAndSearchIcon from "@/components/GreetingTextAndSearchIcon";
-import TotalBalanceBorderBox from "@/components/TotalBalanceBorderBox";
-import { useEffect, useState } from "react";
-import AddIcon from "@expo/vector-icons/AntDesign";
-import AddTransactionModal from "@/components/AddTransactionModal";
-import { categories } from "@/constants/categoryData";
-import SearchTransactionModal from "@/components/SearchTransactionModal";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
-import Trashcan from '@expo/vector-icons/FontAwesome';
 
 interface Transaction {
   id: string;
