@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Pressable, Platform } from "react-native";
 import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-import { categories } from "@/constants/categoryData";
+import { categories, types } from "@/constants/categoryData";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 
@@ -14,6 +14,8 @@ interface TransactionFormProps {
   setDate: React.Dispatch<React.SetStateAction<string>>;
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
+  type: string;
+  setType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const TransactionForm = ({
@@ -25,6 +27,8 @@ const TransactionForm = ({
   setDate,
   category,
   setCategory,
+  type,
+  setType,
 }: TransactionFormProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -71,7 +75,7 @@ const TransactionForm = ({
       </View>
 
       <View className="mb-5">
-        <Text className="text-primaryText mb-2">Date</Text>
+        <Text style={{ fontFamily: "Inter", fontSize: 18, fontWeight: "500" }} className="text-primaryText mb-2">Date</Text>
 
         {Platform.OS === "web" ? (
           <input
@@ -120,6 +124,28 @@ const TransactionForm = ({
 
           {categories.map((cat) => (
             <Picker.Item key={cat.key} label={cat.label} value={cat.key} />
+          ))}
+        </Picker>
+      </View>
+      
+      <View className="mb-5">
+        <Text
+          style={{ fontFamily: "Inter", fontSize: 18, fontWeight: "500" }}
+          className="text-primaryText mb-2"
+        >
+          Type
+        </Text>
+        <Picker
+          style={{ fontFamily: "Inter", fontSize: 15, fontWeight: "500", paddingVertical: 10, }}
+          selectedValue={type}
+          className="h-10 m-0 border p-3 text-black"
+          onValueChange={(itemValue) => setType(itemValue)}
+        >
+
+          <Picker.Item label="Type:" value=""/>
+
+          {types.map((ty) => (
+            <Picker.Item key={ty.key} label={ty.label} value={ty.key} />
           ))}
         </Picker>
       </View>

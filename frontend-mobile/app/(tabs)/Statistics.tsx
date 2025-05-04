@@ -2,7 +2,9 @@ import { categories } from "@/constants/categoryData";
 import { BarChart } from "react-native-gifted-charts";
 import { weekLabels, monthLabels, yearLabels } from "@/constants/dataSets";
 import { colors } from "@/constants/colors";
+import { ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import {
   FlatList,
   Image,
@@ -12,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { color } from "@rneui/base";
 
 interface Transaction {
   id: string;
@@ -26,46 +29,18 @@ const Statistics = () => {
   const [weeklySummary, setWeeklySummary] = useState<number[]>([]);
   const [monthlySummary, setMonthlySummary] = useState<number[]>([]);
   const [yearlySummary, setYearlySummary] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const barData = [
-    {value: 230,label: 'Jan',frontColor: '#4ABFF4'},
-    {value: 180,label: 'Feb',frontColor: '#79C3DB'},
-    {value: 195,label: 'Mar',frontColor: '#28B2B3'},
-    {value: 250,label: 'Apr',frontColor: '#4ADDBA'},
-    {value: 320,label: 'May',frontColor: '#91E3E3'},
-    ];
+    { value: 230, label: "Mon", labelWidth: 30, spacing: 5, frontColor: colors.positive },{ value: 230, frontColor: colors.negative },
+    { value: 230, label: "Tue", labelWidth: 30, spacing: 5, frontColor: colors.positive  },{ value: 230, frontColor: colors.negative  },
+    { value: 230, label: "Wed", labelWidth: 30, spacing: 5, frontColor: colors.positive  },{ value: 230, frontColor: colors.negative },
+    { value: 230, label: "Thu", labelWidth: 30, spacing: 5, frontColor: colors.positive },{ value: 230, frontColor: colors.negative },
+    { value: 230, label: "Fri", labelWidth: 30, spacing: 5, frontColor: colors.positive },{ value: 230, frontColor: colors.negative },
+   
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        // Hämta alla data parallellt för bättre prestanda
-        const [transactionsRes, weeklyRes, monthlyRes, yearlyRes] =
-          await Promise.all([
-            fetch("http://localhost:8080/transactions"),
-            fetch("http://localhost:8080/transactions/weekly-summary/2025/2"),
-            fetch("http://localhost:8080/transactions/monthly-summary/2025/1"),
-            fetch("http://localhost:8080/transactions/yearly-summary/2025"),
-          ]);
-        const transactionsData = await transactionsRes.json();
-        const weeklyData = await weeklyRes.json();
-        const monthlyData = await monthlyRes.json();
-        const yearlyData = await yearlyRes.json();
-
-        setTransactions(transactionsData);
-        setWeeklySummary(weeklyData);
-        setMonthlySummary(monthlyData);
-        setYearlySummary(yearlyData);
-      } catch (error) {
-        console.error("Error when fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const getCategoryIcon = (categoryKey: string) => {
     const category = categories.find((cat) => cat.key === categoryKey);
@@ -95,18 +70,55 @@ const Statistics = () => {
           <View style={{ height: 20 }} />
 
           <View className="mx-0 my-6 p-5">
-            <View className="flex-row justify-between items-center mb-4">
-            <View>
-            <BarChart
-            showFractionalValues
-            showYAxisIndices
-            noOfSections={4}
-            maxValue={400}
-            data={barData}
-            isAnimated
-            backgroundColor={colors.primary}
-            />
-        </View>
+            <View className=" flex-col justify-center items-center mt-2">
+              {barData.length > 0 ? (
+              <BarChart
+                showFractionalValues
+                showYAxisIndices
+                noOfSections={3}
+                minHeight={5}
+                maxValue={400}
+                barWidth={9}
+                spacing={[1,2].includes(activeIndex) ? 20 : 16}
+                data={barData}
+                isAnimated={true}
+                animationDuration={1000}
+                backgroundColor={colors.primary}
+                hideRules
+                yAxisLabelPrefix="kr"
+                yAxisThickness={0}
+                xAxisThickness={0}
+                yAxisLabelWidth={[1,2].includes(activeIndex) ? 55 : 52}
+                yAxisTextStyle={{ color: colors.primaryText }}
+                xAxisLabelTextStyle={{ color: colors.primaryText }}
+                roundedTop
+              />
+              ) : (
+
+                 <View/>
+              )}
+
+              {
+                isLoading && (
+                  <View>
+                          <ActivityIndicator color={colors.primaryText}/>
+                  </View>
+                )
+              }
+
+
+            </View>
+            <View className="flex-row justify-center items-center mt-10 gap-3">
+              <SegmentedControl
+                values={["Weekly", "Monthly", "Yearly"]}
+                selectedIndex={activeIndex}
+                onChange={(event) => {
+                  setActiveIndex(event.nativeEvent.selectedSegmentIndex);
+                }}
+                style={{ width: 300 }}
+                backgroundColor={colors.primary}
+                tintColor={colors.active}
+              />
             </View>
           </View>
 

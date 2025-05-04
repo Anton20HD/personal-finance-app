@@ -30,3 +30,16 @@ export const categories = [
     icon: require("../assets/icons/shopping.png"),
   },
 ];
+
+export const types = [
+  {
+    key: "income",
+    label: "Income",
+  },
+  {
+    key: "Expense",
+    label: "Expense",
+  },
+  
+];
+

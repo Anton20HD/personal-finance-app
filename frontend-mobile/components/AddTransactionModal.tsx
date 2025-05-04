@@ -11,6 +11,7 @@ const AddTransactionModal = ({addTransactionModalVisible, setAddTransactionModal
       const [amount, setAmount] = useState("");
       const [date, setDate] = useState("");
       const [category, setCategory] = useState("");
+      const [type, setType] = useState("");
   
       const handleSubmit = async () => {
 
@@ -26,6 +27,7 @@ const AddTransactionModal = ({addTransactionModalVisible, setAddTransactionModal
             amount: parseInt(amount),
             date: localDateTime,
             category,
+            type,
         };
 
 
@@ -81,6 +83,8 @@ const AddTransactionModal = ({addTransactionModalVisible, setAddTransactionModal
                 setAmount={setAmount}
                 date={date}
                 setDate={setDate}
+                setType={setType}
+                type={type}
               />
             </View>
 
