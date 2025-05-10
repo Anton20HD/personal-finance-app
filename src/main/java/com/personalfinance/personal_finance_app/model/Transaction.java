@@ -27,4 +27,6 @@ public class Transaction {
 
     private String category;
 
+    private String type;
+
 }
