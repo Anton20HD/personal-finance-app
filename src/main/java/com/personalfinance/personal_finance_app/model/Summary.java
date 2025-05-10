@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WeeklySummary {
+public class Summary {
 
     private LocalDate date;
     private double income;

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.personalfinance.personal_finance_app.model.Summary;
 import com.personalfinance.personal_finance_app.model.Transaction;
+import com.personalfinance.personal_finance_app.model.YearlySummary;
 import com.personalfinance.personal_finance_app.service.TransactionService;
 
 import lombok.AllArgsConstructor;
@@ -54,22 +56,22 @@ public class TransactionController {
     public Transaction deleteTransaction(@PathVariable String id) {
                 return transactionService.deleteTransaction(id);
     }
-
-    @GetMapping("/monthly-summary/{year}/{month}")
-    public int getTotalSumInMonth(@PathVariable int year,  @PathVariable int month) {
-        return transactionService.calculateMonthlyTransactionSummary(year, month);
-    }
-
-    @GetMapping("/weekly-summary/{year}/{week}")
-    public int getTotalSumInWeek(@PathVariable int year,  @PathVariable int week) {
-        return transactionService.calculateWeeklySummary(year, week);
+    @GetMapping("/statistics/weekly")
+    public List<Summary> getTotalSumInWeek() {
+        return transactionService.calculateWeeklySummary();
     } 
-    
-    @GetMapping("/yearly-summary/{year}")
-    public int getTotalSumInYear(@PathVariable int year) {
-        return transactionService.calculateYearlyTransactionSummary(year);
+
+    @GetMapping("/statistics/monthly")
+    public List<Summary> getTotalSumInMonth() {
+        return transactionService.calculateMonthlySummary();
+    } 
+
+    @GetMapping("/statistics/yearly")
+    public List<YearlySummary> getTotalSumInYear() {
+        return transactionService.calculateYearlySummary();
     }
 
+    
     
 
 

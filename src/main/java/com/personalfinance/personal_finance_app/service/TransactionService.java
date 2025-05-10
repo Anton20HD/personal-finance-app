@@ -1,16 +1,23 @@
 package com.personalfinance.personal_finance_app.service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.YearMonth;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.personalfinance.personal_finance_app.model.Transaction;
+import com.personalfinance.personal_finance_app.model.YearlySummary;
+import com.personalfinance.personal_finance_app.model.Summary;
 import com.personalfinance.personal_finance_app.repository.TransactionRepo;
 
 import lombok.AllArgsConstructor;
@@ -56,71 +63,107 @@ public class TransactionService {
 
     }
 
-    public int calculateWeeklySummary(int year, int week) {
+    public List<Summary> calculateWeeklySummary() {
+        
+        // Sätter upp dagarna så att vi börjar från måndagen
+        LocalDate startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
 
-        LocalDateTime startOfWeek = LocalDateTime.of(year,1,1,0,0,0,0)
-        .with(WeekFields.of(Locale.getDefault()).weekOfYear(),week)
-        .with(WeekFields.of(Locale.getDefault()).dayOfWeek(), DayOfWeek.MONDAY.getValue());
+        // Skapar två listor med income och expense för att hitta datumet till den specifika typen
+        List<Transaction> incomes = transactionRepo.findByTypeAndDateBetween("income", startOfWeek, endOfWeek);
+        List<Transaction> expenses = transactionRepo.findByTypeAndDateBetween("expense", startOfWeek, endOfWeek);
 
-        LocalDateTime endOfWeek = startOfWeek.plusDays(6);
+        //Mappar varje typ för att hitta datumet och kostnaden för varje transaktion
+        Map<LocalDate, Double> incomeMap = incomes.stream()
+        .collect(Collectors.groupingBy(Transaction::getDate, Collectors.summingDouble(Transaction::getAmount)));
+        
+        Map<LocalDate, Double> expenseMap = expenses.stream()
+        .collect(Collectors.groupingBy(Transaction::getDate, Collectors.summingDouble(Transaction::getAmount)));
 
-        List<Transaction> result = transactionRepo.findAllByDateBetween(startOfWeek, endOfWeek);
+        List<Summary> result = new ArrayList<>();
 
-        int total = result.stream()
-        .mapToInt(Transaction::getAmount)
-        .sum();
 
-        return total;
+        // Loopar genom alla dagar där i är 0 och går hela vägen till 7, alltså veckodagarna
+        // Hämtar värdet från map funktionen och lägger sedan till resultatet i ett nytt weeklysummary objekt
+        for(int i= 0; i < 7; i++) {
+            LocalDate date = startOfWeek.plusDays(i);
+            double income = incomeMap.getOrDefault(date, 0.0);
+            double expense = expenseMap.getOrDefault(date, 0.0);
+            result.add(new Summary(date, income, expense));
+        }
+
+        return result;
       
     }
 
-    public int calculateMonthlyTransactionSummary(int year, int month) {
-
-          // Start of the month at midnight (00:00:00, day 1)
-        LocalDateTime start = LocalDateTime.of(year, month, 1,0,0,0);
+    public List<Summary> calculateMonthlySummary() {
         
-            // Calculate how many days are in the month
-        int lastDay = YearMonth.of(year,month).lengthOfMonth();
+        // Sätter upp månaderna så att vi börjar från 1 till 31
+        YearMonth currentMonth = YearMonth.now();
+        LocalDate start = currentMonth.atDay(1);
+        LocalDate end =  currentMonth.atEndOfMonth();
 
-            // create a date-time for the end of the month at 23:59:59
-        LocalDateTime end = LocalDateTime.of(year,month, lastDay,
-        23,59,59);
+        // Skapar två listor med income och expense för att hitta datumet till den specifika typen
+        List<Transaction> incomes = transactionRepo.findByTypeAndDateBetween("income", start, end);
+        List<Transaction> expenses = transactionRepo.findByTypeAndDateBetween("expense", start, end);
 
+        //Mappar varje typ för att hitta datumet och kostnaden för varje transaktion
+        Map<LocalDate, Double> incomeMap = incomes.stream()
+        .collect(Collectors.groupingBy(Transaction::getDate, Collectors.summingDouble(Transaction::getAmount)));
+        
+        Map<LocalDate, Double> expenseMap = expenses.stream()
+        .collect(Collectors.groupingBy(Transaction::getDate, Collectors.summingDouble(Transaction::getAmount)));
 
-        // handles first and last dates in the month
-         List<Transaction> result = transactionRepo.findAllByDateBetween(start,end);
+        List<Summary> result = new ArrayList<>();
 
-        System.out.println("Hämtade transaktioner:");
-        result.forEach(transaction -> System.out.println(transaction));
+        // Loopar genom alla dagar där i är 1 och går hela vägen till 31, alltså en hel månad
+        // Hämtar värdet från map funktionen och lägger sedan till resultatet i listan
+        for(int i= 1; i <= currentMonth.lengthOfMonth(); i++) {
+            LocalDate date = start.plusDays(i);
+            double income = incomeMap.getOrDefault(date, 0.0);
+            double expense = expenseMap.getOrDefault(date, 0.0);
+            result.add(new Summary(date, income, expense));
+        }
 
-
-         int total = result.stream()
-            .mapToInt(Transaction::getAmount)
-            .sum();
-
-            return total;
-          
+        return result;
+      
     }
 
-        public int calculateYearlyTransactionSummary(int year) {
 
-            LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0,0,0);
-            LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59,59,  999999999);
+    public List<YearlySummary> calculateYearlySummary() {
+        
+        // Sätter upp året
+        LocalDate start = LocalDate.now().withDayOfYear(1);
+        LocalDate end =  start.withDayOfYear(start.lengthOfYear());
 
-             // handles first and last dates in the month
-         List<Transaction> result = transactionRepo.findAllByDateBetween(startOfYear,endOfYear);
+        // Skapar två listor med income och expense för att hitta datumet till den specifika typen
+        List<Transaction> incomes = transactionRepo.findByTypeAndDateBetween("income", start, end);
+        List<Transaction> expenses = transactionRepo.findByTypeAndDateBetween("expense", start, end);
 
-         System.out.println("Hämtade transaktioner:");
-         result.forEach(transaction -> System.out.println(transaction));
- 
- 
-          int total = result.stream()
-             .mapToInt(Transaction::getAmount)
-             .sum();
- 
-             return total;
+        //Mappar varje typ för att hitta datumet och kostnaden för varje transaktion
+        // Här används month istället för localdate för att gruppera per månad och inte varje enskild dag
+        Map<Month, Double> incomeMap = incomes.stream()
+        .collect(Collectors.groupingBy(t -> t.getDate().getMonth(), Collectors.summingDouble(Transaction::getAmount)));
+        
+        Map<Month, Double> expenseMap = expenses.stream()
+        .collect(Collectors.groupingBy(t -> t.getDate().getMonth(), Collectors.summingDouble(Transaction::getAmount)));
 
+        List<YearlySummary> result = new ArrayList<>();
+
+        // Loopar genom alla månader för att räkna ut årsvis
+        // Hämtar värdet från map funktionen och lägger sedan till resultatet i listan
+        for(Month month : Month.values()) {
+            double income = incomeMap.getOrDefault(month, 0.0);
+            double expense = expenseMap.getOrDefault(month, 0.0);
+            result.add(new YearlySummary(month, income, expense));
         }
+
+        return result;
+      
+    }
+
+
+
 
 
 }

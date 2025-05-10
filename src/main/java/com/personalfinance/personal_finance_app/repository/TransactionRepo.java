@@ -1,5 +1,6 @@
 package com.personalfinance.personal_finance_app.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +19,10 @@ public interface TransactionRepo extends MongoRepository<Transaction, String> {
     public List<Transaction> findByCategory(String category);
 
     public List<Transaction> findAllByDateBetween(LocalDateTime start, LocalDateTime end);
+
+    public List<Transaction> findByTypeAndDateBetween(String type, LocalDate start, LocalDate end);
+
+
 
 
 

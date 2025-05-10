@@ -1,5 +1,6 @@
 package com.personalfinance.personal_finance_app.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
@@ -21,9 +22,9 @@ public class Transaction {
 
     private String title;
 
-    private Integer amount;
+    private double amount;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String category;
 
