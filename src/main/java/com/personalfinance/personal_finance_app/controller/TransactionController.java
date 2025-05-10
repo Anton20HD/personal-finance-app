@@ -32,6 +32,22 @@ public class TransactionController {
     // Uses final for only assigning a variable once, cant be changed
     private final TransactionService transactionService;
 
+
+    @GetMapping("/statistics/weekly")
+    public List<Summary> getTotalSumInWeek() {
+        return transactionService.calculateWeeklySummary();
+    }
+
+    @GetMapping("/statistics/monthly")
+    public List<Summary> getTotalSumInMonth() {
+        return transactionService.calculateMonthlySummary();
+    }
+
+    @GetMapping("/statistics/yearly")
+    public List<YearlySummary> getTotalSumInYear() {
+        return transactionService.calculateYearlySummary();
+    }
+
     @GetMapping
     public List<Transaction> fetchAllTransactions() {
         return transactionService.getAllTransactions();
@@ -49,31 +65,12 @@ public class TransactionController {
 
     @PutMapping("/{id}")
     public Transaction updateTransaction(@RequestBody Transaction transaction, @PathVariable String id) {
-            return transactionService.updateTransaction(transaction, id);
+        return transactionService.updateTransaction(transaction, id);
     }
 
     @DeleteMapping("/{id}")
     public Transaction deleteTransaction(@PathVariable String id) {
-                return transactionService.deleteTransaction(id);
+        return transactionService.deleteTransaction(id);
     }
-    @GetMapping("/statistics/weekly")
-    public List<Summary> getTotalSumInWeek() {
-        return transactionService.calculateWeeklySummary();
-    } 
-
-    @GetMapping("/statistics/monthly")
-    public List<Summary> getTotalSumInMonth() {
-        return transactionService.calculateMonthlySummary();
-    } 
-
-    @GetMapping("/statistics/yearly")
-    public List<YearlySummary> getTotalSumInYear() {
-        return transactionService.calculateYearlySummary();
-    }
-
-    
-    
-
-
 
 }
